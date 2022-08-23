@@ -1,8 +1,11 @@
 require './lib/credit_card'
+require 'rspec'
 
 RSpec.describe CreditCard do
   let(:cc_number) { "5541808923795240" }
   let(:bad_number) { "5541801923795240" }
+  let(:good_amex) { "342804633855673" }
+  let(:bad_amex) { "342801633855673" }
 
   describe '#initialize' do
     it 'takes a card number and limit' do
@@ -13,11 +16,29 @@ RSpec.describe CreditCard do
     end
   end
 
-  describe '#is_valid?' do
-    it 'returns whether card is valid' do
+  describe '#luhn_validator' do
+    it 'returns true for valid card' do
       credit_check = CreditCard.new(cc_number, 10_000)
 
       expect(credit_check.is_valid?).to be true
+    end
+
+    it 'returns false for invalid standard card' do
+      credit_check = CreditCard.new(bad_number, 1000)
+
+      expect(credit_check.is_valid?).to be false
+    end
+
+    it 'returns true for valid AmEx card' do
+      credit_check = CreditCard.new(good_amex, 1000)
+
+      expect(credit_check.is_valid?).to be true
+    end
+
+    it 'returns false for invalid AmEx card' do
+      credit_check = CreditCard.new(bad_amex, 1000)
+
+      expect(credit_check.is_valid?).to be false
     end
   end
 
@@ -27,5 +48,14 @@ RSpec.describe CreditCard do
 
       expect(credit_check.last_four).to eq('5240')
     end
+  end
+
+  describe '#is_amex?' do
+    it 'returns true if is amex' do
+      credit_check = CreditCard.new(good_amex, 1000)
+
+      expect(credit_check.is_amex?).to be true
+    end
+
   end
 end
