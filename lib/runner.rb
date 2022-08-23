@@ -16,10 +16,6 @@ welcome = <<HEREDOC
 
 HEREDOC
 
-
-
-
-
 puts welcome
 
 puts 'Enter card number to check:'

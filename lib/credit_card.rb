@@ -2,23 +2,17 @@
 
 # a credit card
 class CreditCard
-  attr_reader :card_number, :limit, :card_number_arr, :check_num, :validity
+  attr_reader :card_number, :limit
 
   def initialize(card_number, credit_limit)
     @card_number = card_number
     @card_number_arr = card_number.split("").map(&:to_i)
     @limit = credit_limit
-    @validity = luhn_validator
+    @valid = luhn_validator
   end
 
   def is_valid?
-    @validity
-  end
-
-  def is_amex?
-    return true if @card_number_arr[0..1].join('') == '34'
-    return true if @card_number_arr[0..1].join('') == '37'
-    false
+    @valid
   end
 
   def card_type
@@ -37,21 +31,14 @@ class CreditCard
   def luhn_validator
       sum = 0
       @card_number_arr.each_with_index do |value, index|
-        if is_amex?
-          if index.odd?
-            value *= 2
-          end
+        if card_type == 'AmEx'
+          value *= 2 if index.odd?
         else
-          if index.even?
-            value *= 2
-          end
+          value *= 2 if index.even?
         end
-        if value >= 10
-          value -= 9
-        end
+        value -= 9 if value >= 10
         sum += value
       end
-      return (sum % 10) == 0
+      (sum % 10) == 0
   end
-
 end

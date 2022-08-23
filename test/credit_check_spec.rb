@@ -1,5 +1,4 @@
 require './lib/credit_card'
-require 'rspec'
 
 RSpec.describe CreditCard do
   let(:cc_number) { "5541808923795240" }
@@ -50,11 +49,11 @@ RSpec.describe CreditCard do
     end
   end
 
-  describe '#is_amex?' do
+  describe '#card_type' do
     it 'returns true if is amex' do
       credit_check = CreditCard.new(good_amex, 1000)
 
-      expect(credit_check.is_amex?).to be true
+      expect(credit_check.card_type).to eq('AmEx')
     end
 
   end
